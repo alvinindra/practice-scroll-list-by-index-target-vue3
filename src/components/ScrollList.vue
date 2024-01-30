@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import PersonItem from './PersonItem.vue';
 import { listData } from '../assets/dataSource';
 
@@ -15,28 +15,42 @@ const props = defineProps({
 })
 
 const itemRefs = ref([]);
+const rootHeight = computed(() => {
+  return props.visibleItems * 72 // Person Item Height
+})
+
+const personIndex = computed(() => { return props.index })
 
 const vFocus = {
-  mounted: (el) => el.focus(),
-};
+  mounted: (el) => el.focus()
+}
 
-onMounted(() => [console.log(itemRefs.value[0])]);
+onMounted(() =>
+  itemRefs[personIndex.value]?.value.scrollIntoView({
+    top: itemRefs[personIndex.value].value.clientHeight,
+    behavior: 'smooth'
+  })
+);
+
+function scrollToPerson () {
+  console.log(personIndex.value)
+  itemRefs[personIndex.value].value.scrollIntoView({
+    top: personIndex.value * itemRefs[personIndex.value].value.clientHeight,
+    behavior: 'smooth'
+  })
+}
+
+watch(personIndex.value, scrollToPerson) 
 </script>
 
 <template>
-  <div class="scroll-list gap-4">
-    <PersonItem
-      v-for="person in listData"
-      :key="person.name"
-      :person="person"
-      ref="itemRefs"
-    />
+  <div class="scroll-list gap-4" :style="{ 'max-height': rootHeight + 'px' }" v-focus>
+    <PersonItem v-for="person in listData" :key="person.name" :person="person" :ref="itemRefs" />
   </div>
 </template>
 
 <style scoped>
 .scroll-list {
-  max-height: 350px; /* Adjust the maximum height as needed */
   overflow-y: auto;
   padding: 1rem;
   border: 1px solid gray;

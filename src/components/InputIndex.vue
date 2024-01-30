@@ -1,13 +1,7 @@
 <template>
   <form @submit.prevent="submitIndex" class="input-index">
-    <input
-      id="indexInput"
-      type="number"
-      v-model="indexValue"
-      placeholder="Input the Index"
-      class="mr-2 border rounded px-2 py-1"
-      required
-    />
+    <input id="indexInput" name="indexValue" type="number" :value="props.index" placeholder="Input the Index"
+      class="mr-2 border rounded px-2 py-1" required />
     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
       Enter
     </button>
@@ -15,12 +9,11 @@
 </template>
 
 <script setup>
-let indexValue = '';
-
-const submitIndex = () => {
-  // You can perform actions with the entered index, for example, emit an event
-  // or call a method in the parent component.
-  console.log('Entered Index:', indexValue);
+import { defineProps, defineEmits } from 'vue'
+const props = defineProps(['index'])
+const emit = defineEmits(['update:index'])
+const submitIndex = (event) => {
+  emit('update:index', Number(event.target.indexValue.value))
 };
 </script>
 

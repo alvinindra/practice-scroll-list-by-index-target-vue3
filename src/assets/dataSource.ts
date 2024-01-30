@@ -1,4 +1,10 @@
-export const listData = [
+interface PersonItem {
+  name: string
+  avatar: string
+  profession: string
+}
+
+export const listData: PersonItem[] = [
   {
     name: 'John Doe',
     avatar: 'https://ui-avatars.com/api/?name=John+Doe',
