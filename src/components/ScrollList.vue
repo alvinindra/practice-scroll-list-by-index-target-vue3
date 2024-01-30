@@ -3,6 +3,17 @@ import { ref, onMounted } from 'vue';
 import PersonItem from './PersonItem.vue';
 import { listData } from '../assets/dataSource';
 
+const props = defineProps({
+  visibleItems: {
+    type: Number,
+    default: 5,
+  },
+  index: {
+    type: Number,
+    default: 0,
+  },
+})
+
 const itemRefs = ref([]);
 
 const vFocus = {
@@ -34,5 +45,6 @@ onMounted(() => [console.log(itemRefs.value[0])]);
 
 .scroll-list:focus {
   border-style: normal;
+  border-color: blue;
 }
 </style>
