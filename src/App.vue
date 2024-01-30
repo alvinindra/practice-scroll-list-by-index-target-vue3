@@ -10,6 +10,6 @@ const visibleItems = ref(5)
 <template>
   <div class="flex flex-col gap-4">
     <ScrollList :visible-items="visibleItems" :index="index" />
-    <InputIndex :index="index" />
+    <InputIndex v-model:index="index" />
   </div>
 </template>

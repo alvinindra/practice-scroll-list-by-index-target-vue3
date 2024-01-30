@@ -15,37 +15,35 @@ const props = defineProps({
 })
 
 const itemRefs = ref([]);
-const rootHeight = computed(() => {
-  return props.visibleItems * 72 // Person Item Height
-})
+const rootHeight = computed(() => props.visibleItems * 72) // Person Item Height * Visible Items should show
 
-const personIndex = computed(() => { return props.index })
+const personIndex = computed(() => props.index)
 
 const vFocus = {
   mounted: (el) => el.focus()
 }
 
 onMounted(() =>
-  itemRefs[personIndex.value]?.value.scrollIntoView({
+  itemRefs[personIndex.value]?.value.scrollTo({
     top: itemRefs[personIndex.value].value.clientHeight,
     behavior: 'smooth'
   })
 );
 
 function scrollToPerson () {
-  console.log(personIndex.value)
-  itemRefs[personIndex.value].value.scrollIntoView({
+  console.log(personIndex.value, itemRefs.value[1].clientHeight)
+  itemRefs[personIndex.value]?.value.scrollTo({
     top: personIndex.value * itemRefs[personIndex.value].value.clientHeight,
     behavior: 'smooth'
   })
 }
 
-watch(personIndex.value, scrollToPerson) 
+watch(() => personIndex.value, scrollToPerson) 
 </script>
 
 <template>
   <div class="scroll-list gap-4" :style="{ 'max-height': rootHeight + 'px' }" v-focus>
-    <PersonItem v-for="person in listData" :key="person.name" :person="person" :ref="itemRefs" />
+    <PersonItem v-for="person in listData" :key="person.name" :person="person" ref="itemRefs" />
   </div>
 </template>
 
