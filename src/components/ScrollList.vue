@@ -15,6 +15,7 @@ const props = defineProps({
 })
 
 const itemRefs = ref([]);
+const scrollContainer = ref(null);
 const rootHeight = computed(() => props.visibleItems * 72) // Person Item Height * Visible Items should show
 
 const personIndex = computed(() => props.index)
@@ -23,24 +24,26 @@ const vFocus = {
   mounted: (el) => el.focus()
 }
 
-onMounted(() => itemRefs.value[12].scrollTo({
-  top: 100,
-  behavior: 'smooth'
-}))
-
 watchEffect(() => {
   if (personIndex.value) {
-    console.log(personIndex.value)
-    itemRefs.value[personIndex.value].scrollTo({
-      top: itemRefs.value[personIndex.value].clientHeight,
+    const targetItem = itemRefs.value[personIndex.value];
+    const position = targetItem.clientHeight * personIndex.value; // Calculate the top offset position of the item
+    console.log(personIndex.value, targetItem.clientHeight * personIndex.value)
+    scrollContainer.value.scrollTo({
+      top: personIndex.value === 0 ? 0 : position,
       behavior: 'smooth'
-    })
+    });
+  } else if (personIndex.value === 0) {
+    scrollContainer.value?.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 }) 
 </script>
 
 <template>
-  <div class="scroll-list gap-4" :style="{ 'max-height': rootHeight + 'px' }" v-focus>
+  <div ref="scrollContainer" class="scroll-list gap-4" :style="{ 'max-height': rootHeight + 'px' }" v-focus>
     <div v-for="person in listData" :key="person.name" ref="itemRefs">
       <PersonItem :person="person" />
     </div>
@@ -51,7 +54,6 @@ watchEffect(() => {
 .scroll-list {
   overflow-y: scroll;
   scroll-behavior: smooth;
-  padding: 1rem;
   border: 1px solid gray;
   border-style: dashed;
 }

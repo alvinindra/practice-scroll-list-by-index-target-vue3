@@ -1,5 +1,5 @@
 <template>
-  <div class="person-item flex items-center mb-4">
+  <div class="person-item flex items-center p-4">
     <img :src="person.avatar" :alt="`${person.name}'s avatar`" class="avatar" />
     <div class="flex-1">
       <h4 class="name text-lg font-bold mb-1">{{ person.name }}</h4>
